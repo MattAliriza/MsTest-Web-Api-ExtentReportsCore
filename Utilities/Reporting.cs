@@ -4,6 +4,7 @@ using AventStack.ExtentReports;
 using AventStack.ExtentReports.MarkupUtils;
 using AventStack.ExtentReports.Reporter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
 
 namespace HackaThon.Utilities
 {
@@ -11,6 +12,7 @@ namespace HackaThon.Utilities
     {
         private AventStack.ExtentReports.ExtentReports _extent;
         private string _reportLocation = Environment.CurrentDirectory + @"\..\..\..\Reports\" + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + @"\";
+        private int _screenShotCounter = 0;
 
         public Reporting()
         {
@@ -80,10 +82,39 @@ namespace HackaThon.Utilities
             Assert.Fail(message);
         }
 
+        public void TestFailedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)
+        {
+            //Creates the screenshot file
+            string screenShotPath = Capture(driver);
+
+            //Logs the screenshot to the report
+            currentTest.Log(Status.Fail, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
+
+            //Shuts down the driver
+            driver.Quit();
+
+            //Fails the test
+            Assert.Fail(message);
+        }
+
         public void InjectPictureFrom(ExtentTest currentTest, string url)
         {
             //Embeds a picture
             currentTest.Log(Status.Pass, "<img src=" + url + " width=250px height=250px />");
         }
+
+        private string Capture(IWebDriver driver)
+        {
+            ITakesScreenshot ts = (ITakesScreenshot)driver;
+            Screenshot screenshot = ts.GetScreenshot();
+            string fullPath = _reportLocation + "ScreenShot" + _screenShotCounter + ".png";
+            screenshot.SaveAsFile(new Uri(fullPath).LocalPath);
+
+            //Increments the screenshot number
+            _screenShotCounter++;
+
+            return fullPath;
+        }
+
     }
 }
