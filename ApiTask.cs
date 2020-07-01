@@ -8,6 +8,7 @@ using HackaThon.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
+[assembly: Parallelize(Workers = 0, Scope = ExecutionScope.MethodLevel)]
 namespace HackaThon
 {
     [TestClass]
@@ -137,11 +138,5 @@ namespace HackaThon
             Core.ExtentReport.InjectPictureFrom(currentTest, imageLocation.ToString());
         }
 
-        //CSV
-        //DB storing
-        //JSON storing
-
-        //Hybrid approach
-        //unit test & modular classes
     }
 }
