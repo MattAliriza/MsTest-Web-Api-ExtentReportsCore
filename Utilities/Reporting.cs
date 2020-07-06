@@ -17,7 +17,7 @@ namespace HackaThon.Utilities
         public Reporting()
         {
             //Creates the folder
-            CreateFileAtLocation(_reportLocation);
+            CreateFolderAtLocation(_reportLocation);
 
             //Creates a reports object
             var Htmlreporter = new ExtentHtmlReporter(_reportLocation);
@@ -40,7 +40,7 @@ namespace HackaThon.Utilities
             _extent.Flush();
         }
 
-        private void CreateFileAtLocation(string location)
+        private void CreateFolderAtLocation(string location)
         {
             Directory.CreateDirectory(location);
         }
@@ -49,6 +49,21 @@ namespace HackaThon.Utilities
         {
             //Logs the message
             currentTest.Log(Status.Pass, message);
+        }
+
+        public void StepPending(ExtentTest currentTest)
+        {
+            //Logs the message
+            currentTest.Log(Status.Pass, "Test pending!");
+        }
+
+        public void StepPassedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)
+        {
+            //Creates the screenshot file
+            string screenShotPath = Capture(driver);
+
+            //Logs the screenshot to the report
+            currentTest.Log(Status.Pass, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
         }
 
         public void LogResponse(ExtentTest currentTest, string response, CodeLanguage codeFormat)
@@ -73,6 +88,18 @@ namespace HackaThon.Utilities
             currentTest.Log(Status.Info, formattedMessage);
         }
 
+        public void TestFailed(ExtentTest currentTest, IWebDriver driver, string message)
+        {
+            //Logs the message
+            currentTest.Log(Status.Fail, message);
+
+            //Shuts down the driver
+            driver.Quit();
+
+            //Fails the test
+            Assert.Fail(message);
+        }
+
         public void TestFailed(ExtentTest currentTest, string message)
         {
             //Logs the message
@@ -95,6 +122,19 @@ namespace HackaThon.Utilities
 
             //Fails the test
             Assert.Fail(message);
+
+        }
+
+        public void TestSoftFailedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)
+        {
+            //Creates the screenshot file
+            string screenShotPath = Capture(driver);
+
+            //Logs the screenshot to the report
+            currentTest.Log(Status.Fail, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
+
+            //Shuts down the driver
+            driver.Quit();
         }
 
         public void InjectPictureFrom(ExtentTest currentTest, string url)
@@ -107,7 +147,15 @@ namespace HackaThon.Utilities
         {
             ITakesScreenshot ts = (ITakesScreenshot)driver;
             Screenshot screenshot = ts.GetScreenshot();
-            string fullPath = _reportLocation + "ScreenShot" + _screenShotCounter + ".png";
+            string fullPath = _reportLocation + @"ScreenShots\";
+
+            //Creates folder
+            CreateFolderAtLocation(fullPath);
+
+            //Appends the file name
+            fullPath += "image" + _screenShotCounter + ".png";
+
+            //Saves the file
             screenshot.SaveAsFile(new Uri(fullPath).LocalPath);
 
             //Increments the screenshot number
@@ -115,6 +163,5 @@ namespace HackaThon.Utilities
 
             return fullPath;
         }
-
     }
 }
