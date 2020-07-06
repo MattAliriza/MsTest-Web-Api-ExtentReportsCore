@@ -63,7 +63,8 @@ namespace HackaThon.Utilities
             string screenShotPath = Capture(driver);
 
             //Logs the screenshot to the report
-            currentTest.Log(Status.Pass, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
+            var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
+            currentTest.Pass(message, mediaModel);
         }
 
         public void LogResponse(ExtentTest currentTest, string response, CodeLanguage codeFormat)
@@ -115,7 +116,8 @@ namespace HackaThon.Utilities
             string screenShotPath = Capture(driver);
 
             //Logs the screenshot to the report
-            currentTest.Log(Status.Fail, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
+            var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
+            currentTest.Fail(message, mediaModel);
 
             //Shuts down the driver
             driver.Quit();
@@ -131,7 +133,8 @@ namespace HackaThon.Utilities
             string screenShotPath = Capture(driver);
 
             //Logs the screenshot to the report
-            currentTest.Log(Status.Fail, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
+            var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
+            currentTest.Fail(message, mediaModel);
 
             //Closes the instance of the driver
             driver.Quit();
