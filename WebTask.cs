@@ -121,6 +121,8 @@ namespace HackaThon
                     Core.ExtentReport.TestFailed(currentTest, seleniumInstance.GetDriver, "Failed due to the user name '" + testData.username + "' already existing in the application.");
             }
 
+            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
+
             //Submits the form
             if (!seleniumInstance.clickElement(AddUserForm.saveButton))
                 Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed click the 'save' button.");
@@ -131,31 +133,34 @@ namespace HackaThon
 
             //Validates firstname
             if (!newestAdditionToTheTable[0].Equals(testData.fname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[0] + "' not matching '" + testData.fname + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'First Name' not matching '" + testData.fname + "'.");
 
             //Validates lastname
             if (!newestAdditionToTheTable[1].Equals(testData.lname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[1] + "' not matching '" + testData.lname + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Last Name' not matching '" + testData.lname + "'.");
 
             //Validates username
             if (!newestAdditionToTheTable[2].Equals(testData.username))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[2] + "' not matching '" + testData.username + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'User Name' not matching '" + testData.username + "'.");
 
             //Validates customer
             if (!newestAdditionToTheTable[3].Equals(testData.customer))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[3] + "' not matching '" + testData.customer + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Customer' not matching '" + testData.customer + "'.");
 
             //Validates role
             if (!newestAdditionToTheTable[4].Equals(testData.role))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[4] + "' not matching '" + testData.role + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Role' not matching '" + testData.role + "'.");
 
             //Validates email
             if (!newestAdditionToTheTable[5].Equals(testData.email))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[5] + "' not matching '" + testData.email + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'E-mail' not matching '" + testData.email + "'.");
 
             //Validates cellnumber
             if (!newestAdditionToTheTable[6].Equals(testData.cellnumber))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value '" + newestAdditionToTheTable[6] + "' not matching '" + testData.cellnumber + "'.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Cell Number' not matching '" + testData.cellnumber + "'.");
+
+            //Logs a passing step to the report
+            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
 
             //Closes the instance of the driver
             seleniumInstance.GetDriver.Quit();
@@ -164,6 +169,8 @@ namespace HackaThon
         [TestMethod]
         public void Web_Test_DynamiclyFetchingTestData()
         {
+            //Variable used to fail mstest & avoid confusion due to the soft asserts
+            bool testOutcome = true;
 
             //Reads CSV file 
             testDataFromCsvFile = Core.getTestDataFromCsv(Environment.CurrentDirectory + @"\..\..\..\TestDataArtifacts\DummyData.csv");
@@ -176,10 +183,9 @@ namespace HackaThon
             int totalColumns = testDataFromCsvFile.GetUpperBound(1) + 1;
             for (int row = 0; row < totalRows; row++)
             {
-
                 //Creates a test per iteration 
                 var currentTest = Core.ExtentReport.CreateTest(
-                    MethodBase.GetCurrentMethod().ToString().Replace("Void", "").Replace("()", ""),
+                    "Dynamic Iteration - " + (row + 1),
                     "This is a demo test for a basic Web UI test using selenium. <br/> "
                     + "<br/><b>Test data being used: </b><br/>"
                     + " first name = " + testDataFromCsvFile[row, 0] + "<br/> "
@@ -269,6 +275,8 @@ namespace HackaThon
                         Core.ExtentReport.TestFailed(currentTest, seleniumInstance.GetDriver, "Failed due to the user name '" + testData.username + "' already existing in the application.");
                 }
 
+                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
+
                 //Submits the form
                 if (!seleniumInstance.clickElement(AddUserForm.saveButton))
                     Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed click the 'save' button.");
@@ -279,35 +287,70 @@ namespace HackaThon
 
                 //Validates firstname
                 if (!newestAdditionToTheTable[0].Equals(testData.fname))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'First name' not matching '" + testData.fname + "'.");
+                    testOutcome = false;
+                    continue;
+                }
 
                 //Validates lastname
                 if (!newestAdditionToTheTable[1].Equals(testData.lname))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Last name' not matching '" + testData.lname + "'.");
+                    testOutcome = false;
+                    continue;
+                }
 
                 //Validates username
                 if (!newestAdditionToTheTable[2].Equals(testData.username))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'User name' not matching '" + testData.username + "'.");
+                    testOutcome = false;
+                    continue;
+                }
 
                 //Validates customer
                 if (!newestAdditionToTheTable[3].Equals(testData.customer))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Customer' not matching '" + testData.customer + "'.");
+                    testOutcome = false;
+                    continue;
+                }
 
                 //Validates role
                 if (!newestAdditionToTheTable[4].Equals(testData.role))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Role' not matching '" + testData.role + "'.");
+                    testOutcome = false;
+                    continue;
+                }
 
                 //Validates email
                 if (!newestAdditionToTheTable[5].Equals(testData.email))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value  column 'Email' not matching '" + testData.email + "'.");
+                    testOutcome = false;
+                    continue;
+                }
 
                 //Validates cellnumber
                 if (!newestAdditionToTheTable[6].Equals(testData.cellnumber))
+                {
                     Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Cell Phone' not matching '" + testData.cellnumber + "'.");
+                    testOutcome = false;
+                    continue;
+                }
+
+                //Logs a passing step to the report
+                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
 
                 //Closes the instance of the driver
-                seleniumInstance.GetDriver.Quit();
+                if (seleniumInstance.GetDriver != null)
+                    seleniumInstance.GetDriver.Quit();
             }
+
+            //Assert fails other wise mstest thinks the test passed
+            Assert.IsTrue(testOutcome);
         }
     }
 

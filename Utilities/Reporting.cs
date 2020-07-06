@@ -133,7 +133,7 @@ namespace HackaThon.Utilities
             //Logs the screenshot to the report
             currentTest.Log(Status.Fail, message + currentTest.AddScreenCaptureFromPath(screenShotPath));
 
-            //Shuts down the driver
+            //Closes the instance of the driver
             driver.Quit();
         }
 
