@@ -1,6 +1,8 @@
 # Automation testing Framework
 For more information about running mstest using CLI --> [Click here](https://docs.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest)
 
+*** Please note that this framework executes in parallel, the number of workers will be decided during runtime based on  how many cores are available. ***
+
 ##  Running the test framework
 Executing the **WHOLE** framework
 1. Navigate to the root directory of the framework using CLI
