@@ -9,14 +9,12 @@ Executing the **WHOLE** framework
 <br>
 
 ##  Running just the **Web** scripts
-Executing the **WHOLE** framework
 1. Navigate to the root directory of the framework using CLI
 2. Type `dotnet test --filter testCategory=Web`
 
 <br>
 
 ##  Running just the **Api** scripts
-Executing the **WHOLE** framework
 1. Navigate to the root directory of the framework using CLI
 2. Type `dotnet test --filter testCategory=Api`
 
