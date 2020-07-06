@@ -6,7 +6,7 @@ using HackaThon.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PageObjects;
 
-namespace HackaThon
+namespace HackaThon.TestCases
 {
     [TestClass]
     public class WebTask
@@ -22,7 +22,7 @@ namespace HackaThon
             Core.ExtentReport.Flush();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Web")]
         public void Web_Test_HardCodedTestData()
         {
             //Populates test data object from hard coded values
@@ -166,7 +166,7 @@ namespace HackaThon
             seleniumInstance.GetDriver.Quit();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Web")]
         public void Web_Test_DynamiclyFetchingTestData()
         {
             //Variable used to fail mstest & avoid confusion due to the soft asserts

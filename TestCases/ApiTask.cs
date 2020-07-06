@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
 // [assembly: Parallelize(Workers = 0, Scope = ExecutionScope.MethodLevel)]
-namespace HackaThon
+namespace HackaThon.TestCases
 {
     [TestClass]
     public class ApiTask
@@ -21,7 +21,7 @@ namespace HackaThon
             Core.ExtentReport.Flush();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Api")]
         public void AllDogBreeds_Test()
         {
             var currentTest = Core.ExtentReport.CreateTest(
@@ -64,7 +64,7 @@ namespace HackaThon
 
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Api")]
         public void SubBreeds_Test()
         {
             var currentTest = Core.ExtentReport.CreateTest(

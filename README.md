@@ -8,6 +8,20 @@ Executing the **WHOLE** framework
 
 <br>
 
+##  Running just the **Web** scripts
+Executing the **WHOLE** framework
+1. Navigate to the root directory of the framework using CLI
+2. Type `dotnet test --filter testCategory=Web`
+
+<br>
+
+##  Running just the **Api** scripts
+Executing the **WHOLE** framework
+1. Navigate to the root directory of the framework using CLI
+2. Type `dotnet test --filter testCategory=Api`
+
+<br>
+
 ## ApiTask file:
 This is the automation script for 'Task 1'.
 
@@ -15,6 +29,8 @@ This is the automation script for 'Task 1'.
 
 ## WebTask file:
 This contains two automation scripts for 'Task 2'. The reason for having two automation scripts is to demonstrate using Test data that has been hard coded and test data that has been read in from a csv file.
+
+<br> The test method called 'Web_Test_DynamiclyFetchingTestData' will execute as many times as there are lines in the csv file.
 
 <br>
 
