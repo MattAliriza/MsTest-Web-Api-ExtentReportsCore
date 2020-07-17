@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using HackaThon.Models;
 using HackaThon.PageObjects;
 using HackaThon.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -77,7 +78,6 @@ namespace HackaThon.TestCases
                 Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the 'add user' form not being present");
 
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
-
 
             //Inserts the firstname
             if (!seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname))
@@ -173,7 +173,7 @@ namespace HackaThon.TestCases
             bool testOutcome = true;
 
             //Reads CSV file 
-            testDataFromCsvFile = Core.getTestDataFromCsv(Environment.CurrentDirectory + @"\..\..\..\TestDataArtifacts\DummyData.csv");
+            testDataFromCsvFile = CsvUtil.getTestDataFromCsv(Environment.CurrentDirectory + @"\..\..\..\TestDataArtifacts\DummyData.csv");
 
             //Website url
             string websiteUrl = "http://www.way2automation.com/angularjs-protractor/webtables/";
@@ -352,20 +352,5 @@ namespace HackaThon.TestCases
             //Assert fails other wise mstest thinks the test passed
             Assert.IsTrue(testOutcome);
         }
-    }
-
-
-    //Test data model
-    public class testDataObject
-    {
-        public string fname { get; set; }
-        public string lname { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
-        public string customer { get; set; }
-        public string role { get; set; }
-        public string email { get; set; }
-        public string cellnumber { get; set; }
-
     }
 }

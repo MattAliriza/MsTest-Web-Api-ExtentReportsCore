@@ -5,11 +5,6 @@ namespace HackaThon.Utilities
 {
     public class APIUtils
     {
-        public APIUtils()
-        {
-
-        }
-
         public static IRestResponse GetRequest(string EndPoint, Dictionary<string, string> Headers)
         {
             //Creating the Http client
