@@ -12,6 +12,7 @@ namespace HackaThon.Utilities
     {
 
         private IWebDriver _driver;
+        private TimeSpan _timeOutValue = TimeSpan.FromSeconds(5);
 
         public WebUtils(string url)
         {
@@ -49,11 +50,18 @@ namespace HackaThon.Utilities
         //     }
         // }
 
+        private By find(By locator)
+        {
+            var wait = new WebDriverWait(_driver, (_timeOutValue));
+            wait.Until(drv => drv.FindElement(locator));
+            return locator;
+        }
+
         public bool CheckElementIsPresent(string xpath)
         {
             try
             {
-                IWebElement ele = _driver.FindElement(By.XPath(xpath));
+                IWebElement ele = _driver.FindElement(find(By.XPath(xpath)));
 
                 return ele.Displayed;
             }
@@ -68,7 +76,7 @@ namespace HackaThon.Utilities
         {
             try
             {
-                IWebElement ele = _driver.FindElement(By.XPath(xpath));
+                IWebElement ele = _driver.FindElement(find(By.XPath(xpath)));
 
                 if (!ele.Displayed)
                     return false;
@@ -87,7 +95,7 @@ namespace HackaThon.Utilities
         {
             try
             {
-                IWebElement ele = _driver.FindElement(By.XPath(xpath));
+                IWebElement ele = _driver.FindElement(find(By.XPath(xpath)));
 
                 if (!ele.Displayed)
                     return false;
@@ -106,7 +114,7 @@ namespace HackaThon.Utilities
         {
             try
             {
-                IWebElement ele = _driver.FindElement(By.XPath(xpath));
+                IWebElement ele = _driver.FindElement(find(By.XPath(xpath)));
 
                 if (!ele.Displayed)
                     return false;
@@ -130,7 +138,7 @@ namespace HackaThon.Utilities
         {
             try
             {
-                var elementList = _driver.FindElements(By.XPath(xpath));
+                var elementList = _driver.FindElements(find(By.XPath(xpath)));
                 ArrayList tempList = new ArrayList();
 
                 //Extrats text values
