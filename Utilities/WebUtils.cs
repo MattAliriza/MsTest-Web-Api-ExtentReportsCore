@@ -8,6 +8,26 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace HackaThon.Utilities
 {
+
+    //
+    //Example of faster execution of xpaths
+    //
+
+    // public bool CheckElementIsDisplayed(string areaToSearh, string xpath)
+    // {
+    //     try
+    //     {
+    //         IWebElement ele = _driver.FindElement(By.XPath(areaToSearch));
+    //         IWebElement actualEle = ele.FindElement(By.XPath(xpath));
+    //         return actualEle.Displayed;
+    //     }
+    //     catch (Exception exc)
+    //     {
+    //         Console.WriteLine(exc.Message);
+    //         return false;
+    //     }
+    // }
+
     public class WebUtils
     {
 
@@ -27,28 +47,6 @@ namespace HackaThon.Utilities
 
         public IWebDriver GetDriver => _driver;
 
-        //
-        //Example of faster execution of xpaths
-        //
-
-        // public bool CheckElementIsPresent(string areaToSearh, string xpath)
-        // {
-        //     try
-        //     {
-        //         IWebElement ele = _driver.FindElement(By.XPath(areaToSearch));
-        //         IWebElement actualEle = ele.FindElement(By.XPath(xpath));
-
-        //         if (!actualEle.Displayed)
-        //             return false;
-
-        //         return true;
-        //     }
-        //     catch (Exception exc)
-        //     {
-        //         Console.WriteLine(exc.Message);
-        //         return false;
-        //     }
-        // }
 
         private By find(By locator)
         {
