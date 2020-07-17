@@ -1,7 +1,7 @@
 namespace HackaThon.Models
 {
     //Test data model
-    public class testDataObject
+    public class User
     {
         public string fname { get; set; }
         public string lname { get; set; }
@@ -11,6 +11,5 @@ namespace HackaThon.Models
         public string role { get; set; }
         public string email { get; set; }
         public string cellnumber { get; set; }
-
     }
 }

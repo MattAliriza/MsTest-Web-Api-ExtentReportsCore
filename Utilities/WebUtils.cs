@@ -28,11 +28,10 @@ namespace HackaThon.Utilities
     //     }
     // }
 
+    //Send through stackTrace
     public class WebUtils
     {
-
         private IWebDriver _driver;
-        private TimeSpan _timeOutValue = TimeSpan.FromSeconds(5);
 
         public WebUtils(string url)
         {
@@ -47,10 +46,9 @@ namespace HackaThon.Utilities
 
         public IWebDriver GetDriver => _driver;
 
-
-        private By find(By locator)
+        public By find(By locator, int timeout = 5)
         {
-            var wait = new WebDriverWait(_driver, (_timeOutValue));
+            var wait = new WebDriverWait(_driver, (TimeSpan.FromSeconds(timeout)));
             wait.Until(drv => drv.FindElement(locator));
             return locator;
         }

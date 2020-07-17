@@ -35,10 +35,7 @@ namespace HackaThon.Utilities
             return _extent.CreateTest(testName, description);
         }
 
-        public void Flush()
-        {
-            _extent.Flush();
-        }
+        public void Flush() => _extent.Flush();
 
         private void CreateFolderAtLocation(string location)
         {

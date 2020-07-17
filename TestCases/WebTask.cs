@@ -27,7 +27,7 @@ namespace HackaThon.TestCases
         public void Web_Test_HardCodedTestData()
         {
             //Populates test data object from hard coded values
-            testDataObject testData = new testDataObject()
+            User testData = new User()
             {
                 fname = testDataFromBeingHarcoded[0],
                 lname = testDataFromBeingHarcoded[1],
@@ -199,7 +199,7 @@ namespace HackaThon.TestCases
                 );
 
                 //Populates test data object from csv values
-                testDataObject testData = new testDataObject()
+                User testData = new User()
                 {
                     fname = testDataFromCsvFile[row, 0],
                     lname = testDataFromCsvFile[row, 1],
