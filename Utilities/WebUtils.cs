@@ -26,16 +26,36 @@ namespace HackaThon.Utilities
 
         public IWebDriver GetDriver => _driver;
 
+        //
+        //Example of faster execution of xpaths
+        //
+
+        // public bool CheckElementIsPresent(string areaToSearh, string xpath)
+        // {
+        //     try
+        //     {
+        //         IWebElement ele = _driver.FindElement(By.XPath(areaToSearch));
+        //         IWebElement actualEle = ele.FindElement(By.XPath(xpath));
+
+        //         if (!actualEle.Displayed)
+        //             return false;
+
+        //         return true;
+        //     }
+        //     catch (Exception exc)
+        //     {
+        //         Console.WriteLine(exc.Message);
+        //         return false;
+        //     }
+        // }
+
         public bool CheckElementIsPresent(string xpath)
         {
             try
             {
                 IWebElement ele = _driver.FindElement(By.XPath(xpath));
 
-                if (!ele.Displayed)
-                    return false;
-
-                return true;
+                return ele.Displayed;
             }
             catch (Exception exc)
             {

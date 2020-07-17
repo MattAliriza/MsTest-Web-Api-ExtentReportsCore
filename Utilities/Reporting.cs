@@ -124,7 +124,6 @@ namespace HackaThon.Utilities
 
             //Fails the test
             Assert.Fail(message);
-
         }
 
         public void TestSoftFailedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)

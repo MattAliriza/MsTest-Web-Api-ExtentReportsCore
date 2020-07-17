@@ -1,5 +1,3 @@
-using System;
-
 namespace HackaThon.Utilities
 {
     public class Core
