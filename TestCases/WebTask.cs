@@ -71,8 +71,7 @@ namespace HackaThon.TestCases
             WebUtils seleniumInstance = new WebUtils(websiteUrl);
 
             //validates that the correct page is displayed
-            if (!seleniumInstance.CheckElementIsPresent(WebTablePage.table))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the correct page not being shown.");
+            seleniumInstance.CheckElementIsPresent(WebTablePage.table, currentTest, seleniumInstance.GetDriver);
 
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to '" + websiteUrl + "'.");
 
@@ -80,46 +79,36 @@ namespace HackaThon.TestCases
             ArrayList currentlyStoredUserNames = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableUsernameValues));
 
             //Clicks the add user button
-            if (!seleniumInstance.clickElement(WebTablePage.addUserButton))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed to click the add user button.");
+            seleniumInstance.clickElement(WebTablePage.addUserButton, currentTest, seleniumInstance.GetDriver);
 
             //Validates that the add user pop up appears
-            if (!seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the 'add user' form not being present");
+            seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm, currentTest, seleniumInstance.GetDriver);
 
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
 
             //Inserts the firstname
-            if (!seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.fname + "' into the first name field.");
+            seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the lastname
-            if (!seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.lname + "' into the last name field.");
+            seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the username
-            if (!seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.username + "' into the user name field.");
+            seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the password
-            if (!seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.password + "' into the password field.");
+            seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password, currentTest, seleniumInstance.GetDriver);
 
             //Selects the customer
-            if (!seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer)))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed to select the '" + testData.customer + "' radio button.");
+            seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer), currentTest, seleniumInstance.GetDriver);
 
             //Selects the role
-            if (!seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed select '" + testData.role + "' from the role combo box.");
+            seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the email
-            if (!seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.email + "' into the email field.");
+            seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the cellphone
-            if (!seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.cellnumber + "' into the cell phone field.");
+            seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber, currentTest, seleniumInstance.GetDriver);
 
             //logs a step passed
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully filled out the 'add user' form.");
@@ -134,8 +123,7 @@ namespace HackaThon.TestCases
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
 
             //Submits the form
-            if (!seleniumInstance.clickElement(AddUserForm.saveButton))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed click the 'save' button.");
+            seleniumInstance.clickElement(AddUserForm.saveButton, currentTest, seleniumInstance.GetDriver);
 
             //Ensures that the user has been added to the top of the list with the exact details
             //Stores usernames for later validation
@@ -205,8 +193,7 @@ namespace HackaThon.TestCases
             WebUtils seleniumInstance = new WebUtils(websiteUrl);
 
             //validates that the correct page is displayed
-            if (!seleniumInstance.CheckElementIsPresent(WebTablePage.table))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the correct page not being shown.");
+            seleniumInstance.CheckElementIsPresent(WebTablePage.table, currentTest, seleniumInstance.GetDriver);
 
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to '" + websiteUrl + "'.");
 
@@ -214,46 +201,36 @@ namespace HackaThon.TestCases
             ArrayList currentlyStoredUserNames = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableUsernameValues));
 
             //Clicks the add user button
-            if (!seleniumInstance.clickElement(WebTablePage.addUserButton))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed to click the add user button.");
+            seleniumInstance.clickElement(WebTablePage.addUserButton, currentTest, seleniumInstance.GetDriver);
 
             //Validates that the add user pop up appears
-            if (!seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the 'add user' form not being present");
+            seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm, currentTest, seleniumInstance.GetDriver);
 
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
 
             //Inserts the firstname
-            if (!seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.fname + "' into the first name field.");
+            seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the lastname
-            if (!seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.lname + "' into the last name field.");
+            seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the username
-            if (!seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.username + "' into the user name field.");
+            seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the password
-            if (!seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.password + "' into the password field.");
+            seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password, currentTest, seleniumInstance.GetDriver);
 
             //Selects the customer
-            if (!seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer)))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed to select the '" + testData.customer + "' radio button.");
+            seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer), currentTest, seleniumInstance.GetDriver);
 
             //Selects the role
-            if (!seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed select '" + testData.role + "' from the role combo box.");
+            seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the email
-            if (!seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.email + "' into the email field.");
+            seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email, currentTest, seleniumInstance.GetDriver);
 
             //Inserts the cellphone
-            if (!seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.cellnumber + "' into the cell phone field.");
+            seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber, currentTest, seleniumInstance.GetDriver);
 
             //logs a step passed
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully filled out the 'add user' form.");
@@ -268,8 +245,7 @@ namespace HackaThon.TestCases
             Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
 
             //Submits the form
-            if (!seleniumInstance.clickElement(AddUserForm.saveButton))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed click the 'save' button.");
+            seleniumInstance.clickElement(AddUserForm.saveButton, currentTest, seleniumInstance.GetDriver);
 
             //Ensures that the user has been added to the top of the list with the exact details
             //Stores usernames for later validation
@@ -359,8 +335,7 @@ namespace HackaThon.TestCases
                 WebUtils seleniumInstance = new WebUtils(websiteUrl);
 
                 //validates that the correct page is displayed
-                if (!seleniumInstance.CheckElementIsPresent(WebTablePage.table))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the correct page not being shown.");
+                seleniumInstance.CheckElementIsPresent(WebTablePage.table, currentTest, seleniumInstance.GetDriver);
 
                 Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to '" + websiteUrl + "'.");
 
@@ -368,46 +343,36 @@ namespace HackaThon.TestCases
                 ArrayList currentlyStoredUserNames = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableUsernameValues));
 
                 //Clicks the add user button
-                if (!seleniumInstance.clickElement(WebTablePage.addUserButton))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed to click the add user button.");
+                seleniumInstance.clickElement(WebTablePage.addUserButton, currentTest, seleniumInstance.GetDriver);
 
                 //Validates that the add user pop up appears
-                if (!seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the 'add user' form not being present");
+                seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm, currentTest, seleniumInstance.GetDriver);
 
                 Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
 
                 //Inserts the firstname
-                if (!seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.fname + "' into the first name field.");
+                seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname, currentTest, seleniumInstance.GetDriver);
 
                 //Inserts the lastname
-                if (!seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.lname + "' into the last name field.");
+                seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname, currentTest, seleniumInstance.GetDriver);
 
                 //Inserts the username
-                if (!seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.username + "' into the user name field.");
+                seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username, currentTest, seleniumInstance.GetDriver);
 
                 //Inserts the password
-                if (!seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.password + "' into the password field.");
+                seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password, currentTest, seleniumInstance.GetDriver);
 
                 //Selects the customer
-                if (!seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer)))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed to select the '" + testData.customer + "' radio button.");
+                seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer), currentTest, seleniumInstance.GetDriver);
 
                 //Selects the role
-                if (!seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed select '" + testData.role + "' from the role combo box.");
+                seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role, currentTest, seleniumInstance.GetDriver);
 
                 //Inserts the email
-                if (!seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.email + "' into the email field.");
+                seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email, currentTest, seleniumInstance.GetDriver);
 
                 //Inserts the cellphone
-                if (!seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed enter '" + testData.cellnumber + "' into the cell phone field.");
+                seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber, currentTest, seleniumInstance.GetDriver);
 
                 //logs a step passed
                 Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully filled out the 'add user' form.");
@@ -422,8 +387,7 @@ namespace HackaThon.TestCases
                 Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
 
                 //Submits the form
-                if (!seleniumInstance.clickElement(AddUserForm.saveButton))
-                    Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed click the 'save' button.");
+                seleniumInstance.clickElement(AddUserForm.saveButton, currentTest, seleniumInstance.GetDriver);
 
                 //Ensures that the user has been added to the top of the list with the exact details
                 //Stores usernames for later validation

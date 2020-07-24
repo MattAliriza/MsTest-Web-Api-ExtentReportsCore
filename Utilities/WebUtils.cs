@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using AventStack.ExtentReports;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -53,7 +54,7 @@ namespace HackaThon.Utilities
             return locator;
         }
 
-        public bool CheckElementIsPresent(string xpath)
+        public bool CheckElementIsPresent(string xpath, ExtentTest currentTest, IWebDriver driver)
         {
             try
             {
@@ -63,12 +64,12 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Console.WriteLine(exc.Message);
-                return false;
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed due to the correct page not being shown. Stack trace -" + exc);
+                throw exc;
             }
         }
 
-        public bool clickElement(string xpath)
+        public bool clickElement(string xpath, ExtentTest currentTest, IWebDriver driver)
         {
             try
             {
@@ -82,12 +83,12 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Console.WriteLine(exc.Message);
-                return false;
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed to click. Stack trace - " + exc);
+                throw exc;
             }
         }
 
-        public bool SendKeysTo(string xpath, string keys)
+        public bool SendKeysTo(string xpath, string keys, ExtentTest currentTest, IWebDriver driver)
         {
             try
             {
@@ -101,12 +102,12 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Console.WriteLine(exc.Message);
-                return false;
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed enter '" + keys + "'. Stack trace - " + exc);
+                throw exc;
             }
         }
 
-        public bool SelectValueFromComboBox(string xpath, string comboBoxValue)
+        public bool SelectValueFromComboBox(string xpath, string comboBoxValue, ExtentTest currentTest, IWebDriver driver)
         {
             try
             {
@@ -125,8 +126,8 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Console.WriteLine(exc.Message);
-                return false;
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed select '" + comboBoxValue + "' from the combo box.");
+                throw exc;
             }
         }
 

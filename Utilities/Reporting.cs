@@ -116,6 +116,9 @@ namespace HackaThon.Utilities
             var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
             currentTest.Fail(message, mediaModel);
 
+            //For CI tool to pick up
+            Console.WriteLine(message);
+
             //Shuts down the driver
             driver.Quit();
 
