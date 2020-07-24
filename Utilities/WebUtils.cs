@@ -33,10 +33,10 @@ namespace HackaThon.Utilities
     {
         private IWebDriver _driver;
 
-        public WebUtils(string url)
+        public WebUtils(string url, string chromeVersion = "84.0.4147.30")
         {
             //Configures the driver
-            new DriverManager().SetUpDriver(new ChromeConfig());
+            new DriverManager().SetUpDriver(new ChromeConfig(), chromeVersion);
             _driver = new ChromeDriver();
 
             //Navigates to the URl and maximises the browser
