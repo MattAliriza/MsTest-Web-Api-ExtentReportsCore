@@ -6,16 +6,18 @@ namespace HackaThon.Utilities
     public class APIUtils
     {
 
-        // private string _baseUrl;
-        // public APIUtils(string baseUrl)
-        // {
-        //     _baseUrl = baseUrl;
-        // }
+        private string _baseUrl;
+        private IRestResponse _response;
 
-        public static IRestResponse GetRequest(string EndPoint, Dictionary<string, string> Headers)
+        public APIUtils(string baseUrl)
+        {
+            _baseUrl = baseUrl;
+        }
+
+        public IRestResponse GetRequest(string EndPoint, Dictionary<string, string> Headers)
         {
             //Creating the Http client
-            var client = new RestClient(EndPoint);
+            var client = new RestClient(_baseUrl + EndPoint);
 
             //Sets the time out
             client.Timeout = -1;
@@ -32,11 +34,11 @@ namespace HackaThon.Utilities
                 }
             }
 
-            //Executes the request
-            IRestResponse response = client.Execute(request);
+            //Executes the request & saves it
+            _response = client.Execute(request);
 
             //Returns the response
-            return response;
+            return _response;
         }
     }
 }

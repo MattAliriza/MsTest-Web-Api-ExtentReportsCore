@@ -29,13 +29,15 @@ namespace HackaThon.TestCases
                 "This is a demo test for Locating a value in the Json response."
             );
 
+            APIUtils apiInstance = new APIUtils("https://dog.ceo");
+
             //Sets the headers
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Cookie", "__cfduid=df3050b40e97ce8431938fa8864b5a07b1593608688");
 
             //Retrieves the whole list of Dog breeds
-            var response = APIUtils.GetRequest(
-                "https://dog.ceo/api/breeds/list/all"
+            var response = apiInstance.GetRequest(
+                "/api/breeds/list/all"
                 , headers
                 );
 
@@ -72,6 +74,8 @@ namespace HackaThon.TestCases
                 "This is a demo test for injecting a parameter into the URL of a API request."
             );
 
+            APIUtils apiInstance = new APIUtils("https://dog.ceo");
+
             //Value of breed to search for
             string breedToSearchFor = "retriever";
 
@@ -80,8 +84,8 @@ namespace HackaThon.TestCases
             headers.Add("Cookie", "__cfduid=df3050b40e97ce8431938fa8864b5a07b1593608688");
 
             //Retrieves the sub breeds of the above <breedToSearchFor> value
-            var response = APIUtils.GetRequest(
-                "https://dog.ceo/api/breed/" + breedToSearchFor + "/list"
+            var response = apiInstance.GetRequest(
+                "/api/breed/" + breedToSearchFor + "/list"
                 , headers
                 );
 
@@ -106,16 +110,17 @@ namespace HackaThon.TestCases
                "This is a demo test for injecting a parameter into the URL of a API request."
            );
 
+            APIUtils apiInstance = new APIUtils("https://dog.ceo");
+
             //Sets the headers
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Cookie", "__cfduid=df3050b40e97ce8431938fa8864b5a07b1593608688");
 
             //Retrieves the whole list of Dog breeds
-            var response = APIUtils.GetRequest(
-                "https://dog.ceo/api/breeds/image/random"
+            var response = apiInstance.GetRequest(
+                "/api/breeds/image/random"
                 , headers
                 );
-
 
             //Logs the request
             Core.ExtentReport.LogUrlRequest(currentTest, "https://dog.ceo/api/breeds/image/random", CodeLanguage.Xml);
@@ -136,6 +141,5 @@ namespace HackaThon.TestCases
             //Rendering the image in the report
             Core.ExtentReport.InjectPictureFrom(currentTest, imageLocation.ToString());
         }
-
     }
 }
