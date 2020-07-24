@@ -86,7 +86,7 @@ namespace HackaThon.Utilities
             currentTest.Log(Status.Info, formattedMessage);
         }
 
-        public void TestFailed(ExtentTest currentTest, IWebDriver driver, string message)
+        public void TestFailed(ExtentTest currentTest, IWebDriver driver, string message, bool softAssert = false)
         {
             //Logs the message
             currentTest.Log(Status.Fail, message);
@@ -95,7 +95,8 @@ namespace HackaThon.Utilities
             driver.Quit();
 
             //Fails the test
-            Assert.Fail(message);
+            if (!softAssert)
+                Assert.Fail(message);
         }
 
         public void TestFailed(ExtentTest currentTest, string message)
@@ -107,23 +108,31 @@ namespace HackaThon.Utilities
             Assert.Fail(message);
         }
 
-        public void TestFailedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)
+        public void TestFailedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message, bool softAssert)
         {
             //Creates the screenshot file
             string screenShotPath = Capture(driver);
 
-            //Logs the screenshot to the report
-            var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
-            currentTest.Fail(message, mediaModel);
 
             //For CI tool to pick up
             Console.WriteLine(message);
 
-            //Shuts down the driver
-            driver.Quit();
+            //Fails the test if softAssert = false
+            if (!softAssert)
+            {
+                //Logs the screenshot to the report
+                var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
+                currentTest.Fail(message, mediaModel);
 
-            //Fails the test
-            Assert.Fail(message);
+                //Shuts down the driver
+                driver.Quit();
+
+                //Fails the test
+                Assert.Fail(message);
+            }
+
+            //Logs Soft assert
+            TestSoftFailedWithScreenShot(currentTest, driver, message);
         }
 
         public void TestSoftFailedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)
@@ -134,9 +143,6 @@ namespace HackaThon.Utilities
             //Logs the screenshot to the report
             var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
             currentTest.Fail(message, mediaModel);
-
-            //Closes the instance of the driver
-            driver.Quit();
         }
 
         public void InjectPictureFrom(ExtentTest currentTest, string url)

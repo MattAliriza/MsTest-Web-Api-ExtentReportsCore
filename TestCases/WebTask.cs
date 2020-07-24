@@ -1,11 +1,12 @@
 using System;
-using System.Collections;
+using System.Globalization;
+using System.IO;
 using System.Reflection;
+using CsvHelper;
 using HackaThon.Models;
 using HackaThon.PageObjects;
 using HackaThon.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PageObjects;
 
 namespace HackaThon.TestCases
 {
@@ -34,7 +35,7 @@ namespace HackaThon.TestCases
         }
 
         [TestMethod, TestCategory("Web")]
-        public void Web_Test_HardCodedTestData()
+        public void Web_Test_FromHardCodedTestData()
         {
             //Populates test data object from hard coded values
             User testData = new User()
@@ -64,108 +65,22 @@ namespace HackaThon.TestCases
                 + " cell number = " + testDataFromBeingHarcoded[7] + "<br/> "
             );
 
-            //Website url
-            string websiteUrl = "http://www.way2automation.com/angularjs-protractor/webtables/";
+            //Creates Selenium instance
+            WebUtils seleniumInstance = new WebUtils();
 
-            //Creates a driver instance & navigates to the URL
-            WebUtils seleniumInstance = new WebUtils(websiteUrl);
+            //Creates a driver instance & reporting instance
+            AngularJsProtractor angularSystem = new AngularJsProtractor(seleniumInstance, currentTest);
 
-            //validates that the correct page is displayed
-            seleniumInstance.CheckElementIsPresent(WebTablePage.table, currentTest, seleniumInstance.GetDriver);
-
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to '" + websiteUrl + "'.");
-
-            //Stores usernames for later validation
-            ArrayList currentlyStoredUserNames = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableUsernameValues));
-
-            //Clicks the add user button
-            seleniumInstance.clickElement(WebTablePage.addUserButton, currentTest, seleniumInstance.GetDriver);
-
-            //Validates that the add user pop up appears
-            seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm, currentTest, seleniumInstance.GetDriver);
-
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
-
-            //Inserts the firstname
-            seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the lastname
-            seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the username
-            seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the password
-            seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password, currentTest, seleniumInstance.GetDriver);
-
-            //Selects the customer
-            seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer), currentTest, seleniumInstance.GetDriver);
-
-            //Selects the role
-            seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the email
-            seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the cellphone
-            seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber, currentTest, seleniumInstance.GetDriver);
-
-            //logs a step passed
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully filled out the 'add user' form.");
-
-            //Checks that the username is unique
-            foreach (string existingUsernames in currentlyStoredUserNames)
-            {
-                if (existingUsernames.Equals(testData.username))
-                    Core.ExtentReport.TestFailed(currentTest, seleniumInstance.GetDriver, "Failed due to the user name '" + testData.username + "' already existing in the application.");
-            }
-
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
-
-            //Submits the form
-            seleniumInstance.clickElement(AddUserForm.saveButton, currentTest, seleniumInstance.GetDriver);
-
-            //Ensures that the user has been added to the top of the list with the exact details
-            //Stores usernames for later validation
-            ArrayList newestAdditionToTheTable = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableFirstLineValues));
-
-            //Validates firstname
-            if (!newestAdditionToTheTable[0].Equals(testData.fname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'First Name' not matching '" + testData.fname + "'.");
-
-            //Validates lastname
-            if (!newestAdditionToTheTable[1].Equals(testData.lname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Last Name' not matching '" + testData.lname + "'.");
-
-            //Validates username
-            if (!newestAdditionToTheTable[2].Equals(testData.username))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'User Name' not matching '" + testData.username + "'.");
-
-            //Validates customer
-            if (!newestAdditionToTheTable[3].Equals(testData.customer))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Customer' not matching '" + testData.customer + "'.");
-
-            //Validates role
-            if (!newestAdditionToTheTable[4].Equals(testData.role))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Role' not matching '" + testData.role + "'.");
-
-            //Validates email
-            if (!newestAdditionToTheTable[5].Equals(testData.email))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'E-mail' not matching '" + testData.email + "'.");
-
-            //Validates cellnumber
-            if (!newestAdditionToTheTable[6].Equals(testData.cellnumber))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Cell Number' not matching '" + testData.cellnumber + "'.");
-
-            //Logs a passing step to the report
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
+            angularSystem.WebTablePageInstance.NavigateToWebPage("http://www.way2automation.com/angularjs-protractor/webtables/");
+            angularSystem.WebTablePageInstance.AddUserToTable(testData);
+            angularSystem.WebTablePageInstance.ValidateUserWasAdded(testData);
 
             //Closes the instance of the driver
             seleniumInstance.GetDriver.Quit();
         }
 
         [TestMethod, TestCategory("Web")]
-        public void Web_Test_JsonResponseTestData()
+        public void Web_Test_FromJsonResponseTestData()
         {
             JsonUtil jsonItil = new JsonUtil();
             //Populates test data object from hard coded values
@@ -186,279 +101,78 @@ namespace HackaThon.TestCases
                 + " cell number = " + testDataFromBeingHarcoded[7] + "<br/> "
             );
 
-            //Website url
-            string websiteUrl = "http://www.way2automation.com/angularjs-protractor/webtables/";
+            //Creates Selenium instance
+            WebUtils seleniumInstance = new WebUtils();
 
-            //Creates a driver instance & navigates to the URL
-            WebUtils seleniumInstance = new WebUtils(websiteUrl);
+            //Creates a driver instance & reporting instance
+            AngularJsProtractor angularSystem = new AngularJsProtractor(seleniumInstance, currentTest);
 
-            //validates that the correct page is displayed
-            seleniumInstance.CheckElementIsPresent(WebTablePage.table, currentTest, seleniumInstance.GetDriver);
-
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to '" + websiteUrl + "'.");
-
-            //Stores usernames for later validation
-            ArrayList currentlyStoredUserNames = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableUsernameValues));
-
-            //Clicks the add user button
-            seleniumInstance.clickElement(WebTablePage.addUserButton, currentTest, seleniumInstance.GetDriver);
-
-            //Validates that the add user pop up appears
-            seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm, currentTest, seleniumInstance.GetDriver);
-
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
-
-            //Inserts the firstname
-            seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the lastname
-            seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the username
-            seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the password
-            seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password, currentTest, seleniumInstance.GetDriver);
-
-            //Selects the customer
-            seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer), currentTest, seleniumInstance.GetDriver);
-
-            //Selects the role
-            seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the email
-            seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email, currentTest, seleniumInstance.GetDriver);
-
-            //Inserts the cellphone
-            seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber, currentTest, seleniumInstance.GetDriver);
-
-            //logs a step passed
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully filled out the 'add user' form.");
-
-            //Checks that the username is unique
-            foreach (string existingUsernames in currentlyStoredUserNames)
-            {
-                if (existingUsernames.Equals(testData.username))
-                    Core.ExtentReport.TestFailed(currentTest, seleniumInstance.GetDriver, "Failed due to the user name '" + testData.username + "' already existing in the application.");
-            }
-
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
-
-            //Submits the form
-            seleniumInstance.clickElement(AddUserForm.saveButton, currentTest, seleniumInstance.GetDriver);
-
-            //Ensures that the user has been added to the top of the list with the exact details
-            //Stores usernames for later validation
-            ArrayList newestAdditionToTheTable = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableFirstLineValues));
-
-            //Validates firstname
-            if (!newestAdditionToTheTable[0].Equals(testData.fname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'First Name' not matching '" + testData.fname + "'.");
-
-            //Validates lastname
-            if (!newestAdditionToTheTable[1].Equals(testData.lname))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Last Name' not matching '" + testData.lname + "'.");
-
-            //Validates username
-            if (!newestAdditionToTheTable[2].Equals(testData.username))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'User Name' not matching '" + testData.username + "'.");
-
-            //Validates customer
-            if (!newestAdditionToTheTable[3].Equals(testData.customer))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Customer' not matching '" + testData.customer + "'.");
-
-            //Validates role
-            if (!newestAdditionToTheTable[4].Equals(testData.role))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Role' not matching '" + testData.role + "'.");
-
-            //Validates email
-            if (!newestAdditionToTheTable[5].Equals(testData.email))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'E-mail' not matching '" + testData.email + "'.");
-
-            //Validates cellnumber
-            if (!newestAdditionToTheTable[6].Equals(testData.cellnumber))
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'Cell Number' not matching '" + testData.cellnumber + "'.");
-
-            //Logs a passing step to the report
-            Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
+            angularSystem.WebTablePageInstance.NavigateToWebPage("http://www.way2automation.com/angularjs-protractor/webtables/");
+            angularSystem.WebTablePageInstance.AddUserToTable(testData);
+            angularSystem.WebTablePageInstance.ValidateUserWasAdded(testData);
 
             //Closes the instance of the driver
             seleniumInstance.GetDriver.Quit();
         }
 
         [TestMethod, TestCategory("Web")]
-        public void Web_Test_DynamiclyFetchingTestData()
+        public void Web_Test_FromCsvTestData()
         {
-            //Variable used to fail mstest & avoid confusion due to the soft asserts
-            bool testOutcome = true;
-
-            //Reads CSV file 
-            testDataFromCsvFile = CsvUtil.getTestDataFromCsv(Environment.CurrentDirectory + @"\..\..\..\TestDataArtifacts\DummyData.csv");
-
-            //Website url
-            string websiteUrl = "http://www.way2automation.com/angularjs-protractor/webtables/";
-
-            //Iterates as may rows of data from the CSV file
-            int totalRows = testDataFromCsvFile.GetUpperBound(0) + 1;
-            int totalColumns = testDataFromCsvFile.GetUpperBound(1) + 1;
-            for (int row = 0; row < totalRows; row++)
+            using (var reader = new StreamReader(Environment.CurrentDirectory + @"\..\..\..\TestDataArtifacts\DummyData.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                //Creates a test per iteration 
-                var currentTest = Core.ExtentReport.CreateTest(
-                    "Dynamic Iteration - " + (row + 1),
-                    "This is a demo test for a basic Web UI test using selenium. <br/> "
-                    + "<br/><b>Test data being used: </b><br/>"
-                    + " first name = " + testDataFromCsvFile[row, 0] + "<br/> "
-                    + " last name = " + testDataFromCsvFile[row, 1] + "<br/> "
-                    + "username = " + testDataFromCsvFile[row, 2] + "<br/> "
-                    + " password = " + testDataFromCsvFile[row, 3] + "<br/> "
-                    + " customer = " + testDataFromCsvFile[row, 4] + "<br/> "
-                    + " role = " + testDataFromCsvFile[row, 5] + "<br/> "
-                    + " email = " + testDataFromCsvFile[row, 6] + "<br/> "
-                    + " cell number = " + testDataFromCsvFile[row, 7] + "<br/> "
-                );
-
-                //Populates test data object from csv values
-                User testData = new User()
+                var record = new User();
+                var records = csv.EnumerateRecords(record);
+                foreach (var columnData in records)
                 {
-                    fname = testDataFromCsvFile[row, 0],
-                    lname = testDataFromCsvFile[row, 1],
-                    username = testDataFromCsvFile[row, 2],
-                    password = testDataFromCsvFile[row, 3],
-                    customer = testDataFromCsvFile[row, 4],
-                    role = testDataFromCsvFile[row, 5],
-                    email = testDataFromCsvFile[row, 6],
-                    cellnumber = testDataFromCsvFile[row, 7],
-                };
+                    //Populates test data object from csv values
+                    User testData = new User()
+                    {
+                        fname = columnData.fname.Trim(),
+                        lname = columnData.lname.Trim(),
+                        username = columnData.username.Trim(),
+                        password = columnData.password.Trim(),
+                        customer = columnData.customer.Trim(),
+                        role = columnData.role.Trim(),
+                        email = columnData.email.Trim(),
+                        cellnumber = columnData.cellnumber.Trim(),
+                    };
 
-                //Creates a driver instance & navigates to the URL
-                WebUtils seleniumInstance = new WebUtils(websiteUrl);
+                    //For reporting purposes only
+                    int iteration = 1;
 
-                //validates that the correct page is displayed
-                seleniumInstance.CheckElementIsPresent(WebTablePage.table, currentTest, seleniumInstance.GetDriver);
+                    //Creates a test per iteration
+                    var currentTest = Core.ExtentReport.CreateTest(
+                         MethodBase.GetCurrentMethod().ToString().Replace("Void", "").Replace("()", "") + (iteration),
+                        "This is a demo test for a basic Web UI test using selenium. <br/> "
+                        + "<br/><b>Test data being used: </b><br/>"
+                        + " first name = " + testData.fname + "<br/> "
+                        + " last name = " + testData.lname + "<br/> "
+                        + "username = " + testData.username + "<br/> "
+                        + " password = " + testData.password + "<br/> "
+                        + " customer = " + testData.customer + "<br/> "
+                        + " role = " + testData.role + "<br/> "
+                        + " email = " + testData.email + "<br/> "
+                        + " cell number = " + testData.cellnumber + "<br/> "
+                    );
 
-                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to '" + websiteUrl + "'.");
+                    //Reporting purposes only
+                    iteration++;
 
-                //Stores usernames for later validation
-                ArrayList currentlyStoredUserNames = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableUsernameValues));
+                    //Creates Selenium instance
+                    WebUtils seleniumInstance = new WebUtils();
 
-                //Clicks the add user button
-                seleniumInstance.clickElement(WebTablePage.addUserButton, currentTest, seleniumInstance.GetDriver);
+                    //Creates a driver instance & reporting instance
+                    AngularJsProtractor angularSystem = new AngularJsProtractor(seleniumInstance, currentTest);
 
-                //Validates that the add user pop up appears
-                seleniumInstance.CheckElementIsPresent(WebTablePage.addUserForm, currentTest, seleniumInstance.GetDriver);
+                    angularSystem.WebTablePageInstance.NavigateToWebPage("http://www.way2automation.com/angularjs-protractor/webtables/");
+                    angularSystem.WebTablePageInstance.AddUserToTable(testData);
+                    angularSystem.WebTablePageInstance.ValidateUserWasAdded(testData, true);
 
-                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully navigated to the 'add user' form.");
-
-                //Inserts the firstname
-                seleniumInstance.SendKeysTo(AddUserForm.firstNameInputField, testData.fname, currentTest, seleniumInstance.GetDriver);
-
-                //Inserts the lastname
-                seleniumInstance.SendKeysTo(AddUserForm.lastNameInputField, testData.lname, currentTest, seleniumInstance.GetDriver);
-
-                //Inserts the username
-                seleniumInstance.SendKeysTo(AddUserForm.userNameInputField, testData.username, currentTest, seleniumInstance.GetDriver);
-
-                //Inserts the password
-                seleniumInstance.SendKeysTo(AddUserForm.passwordInputField, testData.password, currentTest, seleniumInstance.GetDriver);
-
-                //Selects the customer
-                seleniumInstance.clickElement(AddUserForm.customerRadioButton(testData.customer), currentTest, seleniumInstance.GetDriver);
-
-                //Selects the role
-                seleniumInstance.SelectValueFromComboBox(AddUserForm.roleComboBox, testData.role, currentTest, seleniumInstance.GetDriver);
-
-                //Inserts the email
-                seleniumInstance.SendKeysTo(AddUserForm.emailInputField, testData.email, currentTest, seleniumInstance.GetDriver);
-
-                //Inserts the cellphone
-                seleniumInstance.SendKeysTo(AddUserForm.cellPhoneInputField, testData.cellnumber, currentTest, seleniumInstance.GetDriver);
-
-                //logs a step passed
-                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully filled out the 'add user' form.");
-
-                //Checks that the username is unique
-                foreach (string existingUsernames in currentlyStoredUserNames)
-                {
-                    if (existingUsernames.Equals(testData.username))
-                        Core.ExtentReport.TestFailed(currentTest, seleniumInstance.GetDriver, "Failed due to the user name '" + testData.username + "' already existing in the application.");
-                }
-
-                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the username '" + testData.username + "' is unique.");
-
-                //Submits the form
-                seleniumInstance.clickElement(AddUserForm.saveButton, currentTest, seleniumInstance.GetDriver);
-
-                //Ensures that the user has been added to the top of the list with the exact details
-                //Stores usernames for later validation
-                ArrayList newestAdditionToTheTable = new ArrayList(seleniumInstance.GetAllValuesFrom(WebTablePage.tableFirstLineValues));
-
-                //Validates firstname
-                if (!newestAdditionToTheTable[0].Equals(testData.fname))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table column 'First name' not matching '" + testData.fname + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Validates lastname
-                if (!newestAdditionToTheTable[1].Equals(testData.lname))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Last name' not matching '" + testData.lname + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Validates username
-                if (!newestAdditionToTheTable[2].Equals(testData.username))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'User name' not matching '" + testData.username + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Validates customer
-                if (!newestAdditionToTheTable[3].Equals(testData.customer))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Customer' not matching '" + testData.customer + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Validates role
-                if (!newestAdditionToTheTable[4].Equals(testData.role))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Role' not matching '" + testData.role + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Validates email
-                if (!newestAdditionToTheTable[5].Equals(testData.email))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table value  column 'Email' not matching '" + testData.email + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Validates cellnumber
-                if (!newestAdditionToTheTable[6].Equals(testData.cellnumber))
-                {
-                    Core.ExtentReport.TestSoftFailedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Failed due to the table  column 'Cell Phone' not matching '" + testData.cellnumber + "'.");
-                    testOutcome = false;
-                    continue;
-                }
-
-                //Logs a passing step to the report
-                Core.ExtentReport.StepPassedWithScreenShot(currentTest, seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
-
-                //Closes the instance of the driver
-                if (seleniumInstance.GetDriver != null)
+                    //Closes the instance of the driver
                     seleniumInstance.GetDriver.Quit();
+                }
             }
-
-            //Assert fails other wise mstest thinks the test passed
-            Assert.IsTrue(testOutcome);
         }
     }
 }

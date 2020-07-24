@@ -34,15 +34,13 @@ namespace HackaThon.Utilities
     {
         private IWebDriver _driver;
 
-        public WebUtils(string url, string chromeVersion = "84.0.4147.30")
+        public WebUtils(string chromeVersion = "84.0.4147.30")
         {
             //Configures the driver
             new DriverManager().SetUpDriver(new ChromeConfig(), chromeVersion);
             _driver = new ChromeDriver();
 
-            //Navigates to the URl and maximises the browser
-            _driver.Navigate().GoToUrl(url);
-            _driver.Manage().Window.Maximize();
+
         }
 
         public IWebDriver GetDriver => _driver;
@@ -54,7 +52,7 @@ namespace HackaThon.Utilities
             return locator;
         }
 
-        public bool CheckElementIsPresent(string xpath, ExtentTest currentTest, IWebDriver driver)
+        public bool CheckElementIsPresent(string xpath, ExtentTest currentTest, IWebDriver driver, bool softAssert = false)
         {
             try
             {
@@ -64,12 +62,12 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed due to the correct page not being shown. Stack trace -" + exc);
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed due to the correct page not being shown. Stack trace -" + exc, softAssert);
                 throw exc;
             }
         }
 
-        public bool clickElement(string xpath, ExtentTest currentTest, IWebDriver driver)
+        public bool clickElement(string xpath, ExtentTest currentTest, IWebDriver driver, bool softAssert = false)
         {
             try
             {
@@ -83,12 +81,12 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed to click. Stack trace - " + exc);
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed to click. Stack trace - " + exc, softAssert);
                 throw exc;
             }
         }
 
-        public bool SendKeysTo(string xpath, string keys, ExtentTest currentTest, IWebDriver driver)
+        public bool SendKeysTo(string xpath, string keys, ExtentTest currentTest, IWebDriver driver, bool softAssert = false)
         {
             try
             {
@@ -102,12 +100,12 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed enter '" + keys + "'. Stack trace - " + exc);
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed enter '" + keys + "'. Stack trace - " + exc, softAssert);
                 throw exc;
             }
         }
 
-        public bool SelectValueFromComboBox(string xpath, string comboBoxValue, ExtentTest currentTest, IWebDriver driver)
+        public bool SelectValueFromComboBox(string xpath, string comboBoxValue, ExtentTest currentTest, IWebDriver driver, bool softAssert = false)
         {
             try
             {
@@ -126,7 +124,7 @@ namespace HackaThon.Utilities
             }
             catch (Exception exc)
             {
-                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed select '" + comboBoxValue + "' from the combo box.");
+                Core.ExtentReport.TestFailedWithScreenShot(currentTest, driver, "Failed select '" + comboBoxValue + "' from the combo box.", softAssert);
                 throw exc;
             }
         }
