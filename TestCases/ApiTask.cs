@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using AventStack.ExtentReports.MarkupUtils;
 using HackaThon.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
@@ -42,17 +40,12 @@ namespace HackaThon.TestCases
                 );
 
             //Verifys that 200 response
-            response.validateResponseIs(HttpStatusCode.OK, currentTest);
+            response.ValidateResponseIs(HttpStatusCode.OK, currentTest);
+            response.ValidateResponseIsJson(response.responseData, currentTest);
 
             //Verify a breed is present
             string breedToSearchFor = "retriever";
-
-            //Verfiy that the response contains the above value
-            JObject json = JObject.Parse(response.responseData.ToString());
-            var match = json["message"].Values<JProperty>().Where(m => m.Name == breedToSearchFor).FirstOrDefault();
-
-            if (match == null)
-                Core.ExtentReport.TestFailed(currentTest, "Failed as the response did not contain the value '" + breedToSearchFor + "'.");
+            response.ValidateResponseContains(breedToSearchFor, currentTest);
 
             //logs that the value was found
             Core.ExtentReport.StepPassed(currentTest, "Successfully located the value '" + breedToSearchFor + "' in the Json response.");
@@ -83,8 +76,8 @@ namespace HackaThon.TestCases
                 );
 
             //Verifys that 200 response
-            response.validateResponseIs(HttpStatusCode.OK, currentTest);
-            Core.ExtentReport.StepPassed(currentTest, "Successfully retireved the Json response for the '" + breedToSearchFor + "' sub breeds.");
+            response.ValidateResponseIs(HttpStatusCode.OK, currentTest);
+            response.ValidateResponseIsJson(response.responseData, currentTest);
         }
 
         [TestMethod]
@@ -109,9 +102,8 @@ namespace HackaThon.TestCases
                 );
 
             //Verifys that 200 response
-            response.validateResponseIs(HttpStatusCode.OK, currentTest);
-
-            Core.ExtentReport.StepPassed(currentTest, "Successfully retrieved a random image.");
+            response.ValidateResponseIs(HttpStatusCode.OK, currentTest);
+            response.ValidateResponseIsJson(response.responseData, currentTest);
 
             //Locating the image url
             JObject json = JObject.Parse(response.responseData.ToString());

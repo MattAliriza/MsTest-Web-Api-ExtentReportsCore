@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.MarkupUtils;
 using HackaThon.Models;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace HackaThon.Utilities
@@ -41,16 +42,16 @@ namespace HackaThon.Utilities
             DateTime timeEnded = DateTime.Now;
 
             //Logs the request
-            Core.ExtentReport.LogUrlRequest(currentTest, this._baseUrl + EndPoint, CodeLanguage.Xml);
+            Core.ExtentReport.LogUrlRequest(currentTest, _baseUrl + EndPoint, Core.CheckIfJson(_baseUrl + EndPoint));
 
             //Logs the response in the report
-            Core.ExtentReport.LogResponse(currentTest, _response.Content, CodeLanguage.Json);
+            Core.ExtentReport.LogResponse(currentTest, _response.Content, Core.CheckIfJson(_response.Content));
 
 
             RestResponseModel apiModel = new RestResponseModel()
             {
                 endPoint = EndPoint,
-                responseData = _response,
+                responseData = _response.Content,
                 duration = timeEnded - timeStarted,
                 statusCode = _response.StatusCode
             };
