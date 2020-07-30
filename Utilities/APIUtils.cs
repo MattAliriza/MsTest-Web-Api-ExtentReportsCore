@@ -1,20 +1,21 @@
+using System;
 using System.Collections.Generic;
+using AventStack.ExtentReports;
+using AventStack.ExtentReports.MarkupUtils;
+using HackaThon.Models;
 using RestSharp;
 
 namespace HackaThon.Utilities
 {
     public class APIUtils
     {
-
         private string _baseUrl;
-        private IRestResponse _response;
-
         public APIUtils(string baseUrl)
         {
             _baseUrl = baseUrl;
         }
 
-        public IRestResponse GetRequest(string EndPoint, Dictionary<string, string> Headers)
+        public RestResponseModel GetRequest(string EndPoint, Dictionary<string, string> Headers, ExtentTest currentTest)
         {
             //Creating the Http client
             var client = new RestClient(_baseUrl + EndPoint);
@@ -35,10 +36,27 @@ namespace HackaThon.Utilities
             }
 
             //Executes the request & saves it
-            _response = client.Execute(request);
+            DateTime timeStarted = DateTime.Now;
+            IRestResponse _response = client.Execute(request);
+            DateTime timeEnded = DateTime.Now;
+
+            //Logs the request
+            Core.ExtentReport.LogUrlRequest(currentTest, this._baseUrl + EndPoint, CodeLanguage.Xml);
+
+            //Logs the response in the report
+            Core.ExtentReport.LogResponse(currentTest, _response.Content, CodeLanguage.Json);
+
+
+            RestResponseModel apiModel = new RestResponseModel()
+            {
+                endPoint = EndPoint,
+                responseData = _response,
+                duration = timeEnded - timeStarted,
+                statusCode = _response.StatusCode
+            };
 
             //Returns the response
-            return _response;
+            return apiModel;
         }
     }
 }

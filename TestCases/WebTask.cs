@@ -16,7 +16,6 @@ namespace HackaThon.TestCases
         //Example of test data being in the automation script
         string[] testDataFromBeingHarcoded = new string[] { "Fname1", "Lname1", "User1", "Pass1", "Company AAA", "Admin", "admin@mail.com", "082555" };
         string[,] testDataFromCsvFile;
-
         string jsonResponse = "{" +
             "\n\"fname\": \"Fname1\"," +
             "\n\"Lname\": \"Lname1\"," +

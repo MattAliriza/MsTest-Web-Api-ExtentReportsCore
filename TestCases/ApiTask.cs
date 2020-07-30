@@ -13,7 +13,6 @@ namespace HackaThon.TestCases
     [TestClass]
     public class ApiTask
     {
-
         [TestCleanup]
         public void CleanUp()
         {
@@ -39,23 +38,17 @@ namespace HackaThon.TestCases
             var response = apiInstance.GetRequest(
                 "/api/breeds/list/all"
                 , headers
+                , currentTest
                 );
 
-            //Logs the request
-            Core.ExtentReport.LogUrlRequest(currentTest, "https://dog.ceo/api/breeds/list/all", CodeLanguage.Xml);
-
-            //Logs the response in the report
-            Core.ExtentReport.LogResponse(currentTest, response.Content, CodeLanguage.Xml);
-
             //Verifys that 200 response
-            if (response.StatusCode != HttpStatusCode.OK)
-                Core.ExtentReport.TestFailed(currentTest, "Failed as the response recieved was '" + response.StatusCode + "', but expected 200.");
+            response.validateResponseIs(HttpStatusCode.OK, currentTest);
 
             //Verify a breed is present
             string breedToSearchFor = "retriever";
 
             //Verfiy that the response contains the above value
-            JObject json = JObject.Parse(response.Content);
+            JObject json = JObject.Parse(response.responseData.ToString());
             var match = json["message"].Values<JProperty>().Where(m => m.Name == breedToSearchFor).FirstOrDefault();
 
             if (match == null)
@@ -63,7 +56,6 @@ namespace HackaThon.TestCases
 
             //logs that the value was found
             Core.ExtentReport.StepPassed(currentTest, "Successfully located the value '" + breedToSearchFor + "' in the Json response.");
-
         }
 
         [TestMethod, TestCategory("Api")]
@@ -87,18 +79,11 @@ namespace HackaThon.TestCases
             var response = apiInstance.GetRequest(
                 "/api/breed/" + breedToSearchFor + "/list"
                 , headers
+                , currentTest
                 );
 
-            //Logs the request
-            Core.ExtentReport.LogUrlRequest(currentTest, "https://dog.ceo/api/breed/" + breedToSearchFor + "/list", CodeLanguage.Xml);
-
-            //Logs the response in the report
-            Core.ExtentReport.LogResponse(currentTest, response.Content, CodeLanguage.Json);
-
             //Verifys that 200 response
-            if (response.StatusCode != HttpStatusCode.OK)
-                Core.ExtentReport.TestFailed(currentTest, "Failed as the response recieved was '" + response.StatusCode + "', but expected 200.");
-
+            response.validateResponseIs(HttpStatusCode.OK, currentTest);
             Core.ExtentReport.StepPassed(currentTest, "Successfully retireved the Json response for the '" + breedToSearchFor + "' sub breeds.");
         }
 
@@ -120,22 +105,16 @@ namespace HackaThon.TestCases
             var response = apiInstance.GetRequest(
                 "/api/breeds/image/random"
                 , headers
+                , currentTest
                 );
 
-            //Logs the request
-            Core.ExtentReport.LogUrlRequest(currentTest, "https://dog.ceo/api/breeds/image/random", CodeLanguage.Xml);
-
-            //Logs the response in the report
-            Core.ExtentReport.LogResponse(currentTest, response.Content, CodeLanguage.Json);
-
             //Verifys that 200 response
-            if (response.StatusCode != HttpStatusCode.OK)
-                Assert.Fail("Failed as the response recieved was '" + response.StatusCode + "', but expected 200.");
+            response.validateResponseIs(HttpStatusCode.OK, currentTest);
 
             Core.ExtentReport.StepPassed(currentTest, "Successfully retrieved a random image.");
 
             //Locating the image url
-            JObject json = JObject.Parse(response.Content);
+            JObject json = JObject.Parse(response.responseData.ToString());
             var imageLocation = json["message"];
 
             //Rendering the image in the report
