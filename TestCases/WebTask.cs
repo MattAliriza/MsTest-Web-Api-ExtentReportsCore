@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using CsvHelper;
 using HackaThon.Models;
 using HackaThon.PageObjects;
@@ -25,13 +26,6 @@ namespace HackaThon.TestCases
             "\n\"Role\": \"Admin\"," +
             "\n\"Email\": \"admin@mail.com\"," +
             "\n\"CellNumber\": \"082555\"\n}";
-
-        [TestCleanup]
-        public void CleanUp()
-        {
-            //In order to be able to execute in Paralell, it can only flush after every test method
-            Core.ExtentReport.Flush();
-        }
 
         [TestMethod, TestCategory("Web")]
         public void Web_Test_FromHardCodedTestData()
@@ -122,6 +116,7 @@ namespace HackaThon.TestCases
             {
                 var record = new User();
                 var records = csv.EnumerateRecords(record);
+
                 foreach (var columnData in records)
                 {
                     //Populates test data object from csv values
@@ -137,12 +132,9 @@ namespace HackaThon.TestCases
                         cellnumber = columnData.cellnumber.Trim(),
                     };
 
-                    //For reporting purposes only
-                    int iteration = 1;
-
                     //Creates a test per iteration
                     var currentTest = Core.ExtentReport.CreateTest(
-                         MethodBase.GetCurrentMethod().ToString().Replace("Void", "").Replace("()", "") + (iteration),
+                         MethodBase.GetCurrentMethod().ToString().Replace("Void", "").Replace("()", ""),
                         "This is a demo test for a basic Web UI test using selenium. <br/> "
                         + "<br/><b>Test data being used: </b><br/>"
                         + " first name = " + testData.fname + "<br/> "
@@ -154,9 +146,6 @@ namespace HackaThon.TestCases
                         + " email = " + testData.email + "<br/> "
                         + " cell number = " + testData.cellnumber + "<br/> "
                     );
-
-                    //Reporting purposes only
-                    iteration++;
 
                     //Creates Selenium instance
                     WebUtils seleniumInstance = new WebUtils();

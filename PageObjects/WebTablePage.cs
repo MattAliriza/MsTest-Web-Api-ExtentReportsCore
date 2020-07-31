@@ -103,37 +103,74 @@ namespace HackaThon.PageObjects
             //Ensures that the user has been added to the top of the list with the exact details
             //Stores usernames for later validation
             ArrayList newestAdditionToTheTable = new ArrayList(_seleniumInstance.GetAllValuesFrom(WebTablePage.tableFirstLineValues));
+            bool allPassed = true;
 
             //Validates firstname
             if (!newestAdditionToTheTable[0].Equals(testData.fname))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'First Name' not matching '" + testData.fname + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'First Name' matched the value '" + testData.fname + "'.");
 
             //Validates lastname
             if (!newestAdditionToTheTable[1].Equals(testData.lname))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'Last Name' not matching '" + testData.lname + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'Last Name' matched the value '" + testData.lname + "'.");
 
             //Validates username
             if (!newestAdditionToTheTable[2].Equals(testData.username))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'User Name' not matching '" + testData.username + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'User name' matched the value '" + testData.username + "'.");
 
             //Validates customer
             if (!newestAdditionToTheTable[3].Equals(testData.customer))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'Customer' not matching '" + testData.customer + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'Customer' matched the value '" + testData.customer + "'.");
 
             //Validates role
             if (!newestAdditionToTheTable[4].Equals(testData.role))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'Role' not matching '" + testData.role + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'Role' matched the value '" + testData.role + "'.");
 
             //Validates email
             if (!newestAdditionToTheTable[5].Equals(testData.email))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'E-mail' not matching '" + testData.email + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'Email' matched the value '" + testData.email + "'.");
 
             //Validates cellnumber
             if (!newestAdditionToTheTable[6].Equals(testData.cellnumber))
+            {
                 Core.ExtentReport.TestFailedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Failed due to the table column 'Cell Number' not matching '" + testData.cellnumber + "'.", softAssert);
+                allPassed = false;
+            }
+
+            Core.ExtentReport.StepPassed(_currentTest, "Successfully validated that the table column 'Cell number' matched the value '" + testData.cellnumber + "'.");
 
             //Logs a passing step to the report
-            Core.ExtentReport.StepPassedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
+            if (allPassed)
+                Core.ExtentReport.StepPassedWithScreenShot(_currentTest, _seleniumInstance.GetDriver, "Successfully validated that the user '" + testData.fname + "' was present");
         }
     }
 }

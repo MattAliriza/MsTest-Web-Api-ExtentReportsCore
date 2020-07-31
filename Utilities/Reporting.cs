@@ -46,12 +46,14 @@ namespace HackaThon.Utilities
         {
             //Logs the message
             currentTest.Log(Status.Pass, message);
+            Core.ExtentReport.Flush();
         }
 
         public void StepPending(ExtentTest currentTest)
         {
             //Logs the message
             currentTest.Log(Status.Pass, "Test pending!");
+            Core.ExtentReport.Flush();
         }
 
         public void StepPassedWithScreenShot(ExtentTest currentTest, IWebDriver driver, string message)
@@ -62,6 +64,7 @@ namespace HackaThon.Utilities
             //Logs the screenshot to the report
             var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
             currentTest.Pass(message, mediaModel);
+            Core.ExtentReport.Flush();
         }
 
         public void LogResponse(ExtentTest currentTest, string response, CodeLanguage codeFormat)
@@ -73,6 +76,7 @@ namespace HackaThon.Utilities
             //Logs the response in the codeFormat
             var formattedMessage = MarkupHelper.CreateCodeBlock(response, codeFormat);
             currentTest.Log(Status.Info, formattedMessage);
+            Core.ExtentReport.Flush();
         }
 
         public void LogUrlRequest(ExtentTest currentTest, string request, CodeLanguage codeFormat)
@@ -84,12 +88,14 @@ namespace HackaThon.Utilities
             //Logs the response in the codeFormat
             var formattedMessage = MarkupHelper.CreateCodeBlock(request, codeFormat);
             currentTest.Log(Status.Info, formattedMessage);
+            Core.ExtentReport.Flush();
         }
 
         public void TestFailed(ExtentTest currentTest, IWebDriver driver, string message, bool softAssert = false)
         {
             //Logs the message
             currentTest.Log(Status.Fail, message);
+            Core.ExtentReport.Flush();
 
             //Shuts down the driver
             driver.Quit();
@@ -103,6 +109,7 @@ namespace HackaThon.Utilities
         {
             //Logs the message
             currentTest.Log(Status.Fail, message);
+            Core.ExtentReport.Flush();
 
             //Fails the test
             Assert.Fail(message);
@@ -123,6 +130,7 @@ namespace HackaThon.Utilities
                 //Logs the screenshot to the report
                 var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
                 currentTest.Fail(message, mediaModel);
+                Core.ExtentReport.Flush();
 
                 //Shuts down the driver
                 driver.Quit();
@@ -143,6 +151,7 @@ namespace HackaThon.Utilities
             //Logs the screenshot to the report
             var mediaModel = MediaEntityBuilder.CreateScreenCaptureFromPath(screenShotPath).Build();
             currentTest.Fail(message, mediaModel);
+            Core.ExtentReport.Flush();
         }
 
         public void InjectPictureFrom(ExtentTest currentTest, string url)

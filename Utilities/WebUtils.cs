@@ -39,8 +39,6 @@ namespace HackaThon.Utilities
             //Configures the driver
             new DriverManager().SetUpDriver(new ChromeConfig(), chromeVersion);
             _driver = new ChromeDriver();
-
-
         }
 
         public IWebDriver GetDriver => _driver;

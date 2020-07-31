@@ -11,13 +11,6 @@ namespace HackaThon.TestCases
     [TestClass]
     public class ApiTask
     {
-        [TestCleanup]
-        public void CleanUp()
-        {
-            //In order to be able to execute in Paralell, it can only flush after every test method
-            Core.ExtentReport.Flush();
-        }
-
         [TestMethod, TestCategory("Api")]
         public void AllDogBreeds_Test()
         {
